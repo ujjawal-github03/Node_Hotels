@@ -5,20 +5,12 @@ require('dotenv').config();
 // Define the MongoDB connection URL
 // const mongoURL = process.env.DB_URL_local 
 const mongoPublicURL=process.env.DB_URL;
-mongoose.connect(mongoPublicURL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+
+mongoose.connect(mongoPublicURL)
+  .then(() => console.log("Connected to MongoDB server"))
+  .catch((err) => console.error("MongoDB server connection error:", err));
 
 const db = mongoose.connection;
-db.on("connected", () => {
-  console.log("Connected to MongoDB server");
-});
-
-db.on("error", () => {
-  console.error("MongoDB server connection error: ",err);
-});
-
 db.on("disconnected", () => {
   console.log("Disonnected to MongoDB server");
 });
