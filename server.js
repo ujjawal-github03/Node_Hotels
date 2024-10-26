@@ -12,6 +12,12 @@ require('dotenv').config();
 const PORT=process.env.PORT || 3000;
 
 
+// Middleware Function
+const logRequest=(req,res,next)=>
+{
+  console.log(`${new Date().toLocaleString()} Request Made To: ${req.originalUrl}`);
+  next(); //Move on yo the next phase
+}
 
 app.get("/", function (req, res) {
   res.send("Hello World");
