@@ -12,21 +12,60 @@ require('dotenv').config();
 const PORT=process.env.PORT || 3000;
 
 
-// Middleware Function
-const logRequest=(req,res,next)=>
-{
-  console.log(`${new Date().toLocaleString()} Request Made To: ${req.originalUrl}`);
-  next(); //Move on yo the next phase
-}
 
-app.get("/", function (req, res) {
+// Authentication
+const passport=require('passport');
+const localStatergy= require('passport-local').Strategy;
+passport.use(new localStatergy(async (USERNAME,PASSWORD,done)=>
+{
+  try {
+    console.log(`Received username: ${USERNAME}`);
+    console.log(`Received password: ${PASSWORD}`);
+    const user=await Person.findOne({username:USERNAME});
+    if(!user)
+    {
+      return done(null,false,{message:"Incorrect username"});
+    }
+    const isPasswordMatch=user.password==PASSWORD? true:false;
+    if(isPasswordMatch)
+    {
+      return done(null,user);
+    } 
+    else
+    {
+      return done(null,false,{message:"Incorrect password"});
+    }
+  } 
+  catch (err) 
+  {
+    return done(err);
+  }
+}))
+app.use(passport.initialize());
+
+
+const localAuthMiddleware=passport.authenticate('local',{session:false})
+
+app.get("/",localAuthMiddleware,function (req, res) {
   res.send("Hello World");
 });
 
 const personRoutes=require('./routes/personRoutes');
 app.use('/person',personRoutes);
 const menuRoutes=require('./routes/menuRoutes');     
-app.use('/menu',menuRoutes);
+const Person = require("./models/Person");
+app.use('/menu',localAuthMiddleware,menuRoutes);
+
+
+
+// Middleware Function
+const logRequest=(req,res,next)=>
+  {
+    console.log(`[${new Date().toLocaleString()}] Request Made To: ${req.originalUrl}`);
+  next(); //Move on yo the next phase
+}
+app.use(logRequest);
+
 
 
 
