@@ -16,7 +16,7 @@ db.on("connected", () => {
 });
 
 db.on("error", () => {
-  console.error("MongoDB server connection error: ",error);
+  console.error("MongoDB server connection error: ",err);
 });
 
 db.on("disconnected", () => {
