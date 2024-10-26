@@ -8,6 +8,11 @@ const app = express();
 const db=require('./db');
 const bodyParser=require('body-parser');
 app.use(bodyParser.json()); // and then it will be stored in req.body
+require('dotenv').config();
+const PORT=process.env.PORT || 3000;
+
+
+
 app.get("/", function (req, res) {
   res.send("Hello World");
 });
@@ -19,26 +24,26 @@ app.use('/menu',menuRoutes);
 
 
 
-app.get("/idli", (req, res) => {
-  var customizedIdli={
-    name:"Rawa Idly",
-    size:"10 cm",
-    isTasty:true,
-    isExpensive:false
-  }
-  res.send(customizedIdli);
-  res.send("Idli is tasty");
-});
+// app.get("/idli", (req, res) => {
+//   var customizedIdli={
+//     name:"Rawa Idly",
+//     size:"10 cm",
+//     isTasty:true,
+//     isExpensive:false
+//   }
+//   res.send(customizedIdli);
+//   res.send("Idli is tasty");
+// });
 
 app.get("/dosa", (req, res) => {
   res.send("Dosa is tasty");
 });
 
 console.log("Server is live");
-const portNumber=3000;
-app.listen(portNumber,()=>
+
+app.listen(PORT,()=>
 {
-  console.log(`Serever is live and listening to ${portNumber}`);
+  console.log(`Serever is live and listening to ${PORT}`);
 });
 
 
