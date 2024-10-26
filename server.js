@@ -7,64 +7,37 @@ const express = require("express");
 const app = express();
 const db=require('./db');
 const bodyParser=require('body-parser');
+const passport=require('./auth');
 app.use(bodyParser.json()); // and then it will be stored in req.body
 require('dotenv').config();
 const PORT=process.env.PORT || 3000;
 
-
-
-// Authentication
-const passport=require('passport');
-const localStatergy= require('passport-local').Strategy;
-passport.use(new localStatergy(async (USERNAME,PASSWORD,done)=>
-{
-  try {
-    console.log(`Received username: ${USERNAME}`);
-    console.log(`Received password: ${PASSWORD}`);
-    const user=await Person.findOne({username:USERNAME});
-    if(!user)
-    {
-      return done(null,false,{message:"Incorrect username"});
-    }
-    const isPasswordMatch=user.password==PASSWORD? true:false;
-    if(isPasswordMatch)
-    {
-      return done(null,user);
-    } 
-    else
-    {
-      return done(null,false,{message:"Incorrect password"});
-    }
-  } 
-  catch (err) 
+// Middleware Function
+const logRequest=(req,res,next)=>
   {
-    return done(err);
-  }
-}))
+    console.log(`[${new Date().toLocaleString()}] \nRequest Made To: ${req.originalUrl}`);
+  next(); //Move on yo the next phase
+}
+app.use(logRequest);
+
+
 app.use(passport.initialize());
+const localAuthMiddleware=passport.authenticate('local',{session:false});
 
 
-const localAuthMiddleware=passport.authenticate('local',{session:false})
+
+
 
 app.get("/",localAuthMiddleware,function (req, res) {
   res.send("Hello World");
 });
-
 const personRoutes=require('./routes/personRoutes');
 app.use('/person',personRoutes);
 const menuRoutes=require('./routes/menuRoutes');     
-const Person = require("./models/Person");
 app.use('/menu',localAuthMiddleware,menuRoutes);
 
 
 
-// Middleware Function
-const logRequest=(req,res,next)=>
-  {
-    console.log(`[${new Date().toLocaleString()}] Request Made To: ${req.originalUrl}`);
-  next(); //Move on yo the next phase
-}
-app.use(logRequest);
 
 
 
