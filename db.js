@@ -2,8 +2,9 @@
 // MongoDB server via mongoose library
 const mongoose = require("mongoose");
 // Define the MongoDB connection URL
-const mongoURL = "mongodb://localhost:27017/hotels";
-mongoose.connect(mongoURL, {
+// const mongoURL = "mongodb://localhost:27017/hotels";
+const mongoPublicURL="mongodb+srv://ujjawaldream3:cluster0kapassword123@cluster0.voq15.mongodb.net/"
+mongoose.connect(mongoPublicURL, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
