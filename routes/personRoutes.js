@@ -5,7 +5,7 @@ const { jwtAuthMiddleware, generateToken } = require("./../jwt");
 // post route to add a person
 router.post("/signup", async (req, res) => {
   try {
-                                                                             const data = req.body; //Assuming the request body contains the person data
+    const data = req.body; //Assuming the request body contains the person data
 
     // Create a new Person document using the Mongoose model
     const newPerson = new Person(data);
