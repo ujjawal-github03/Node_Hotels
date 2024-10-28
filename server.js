@@ -7,10 +7,10 @@ const express = require("express");
 const app = express();
 const db=require('./db');
 const bodyParser=require('body-parser');
-const passport=require('./auth');
 app.use(bodyParser.json()); // and then it will be stored in req.body
-require('dotenv').config();
 const PORT=process.env.PORT || 3000;
+const passport=require('./auth');
+require('dotenv').config();
 
 // Middleware Function
 const logRequest=(req,res,next)=>
