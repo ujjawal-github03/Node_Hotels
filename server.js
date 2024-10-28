@@ -24,10 +24,6 @@ app.use(logRequest);
 app.use(passport.initialize());
 const localAuthMiddleware=passport.authenticate('local',{session:false});
 
-
-
-
-
 app.get("/",localAuthMiddleware,function (req, res) {
   res.send("Hello World");
 });
