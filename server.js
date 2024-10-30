@@ -60,6 +60,8 @@ app.listen(PORT,()=>
   console.log(`Serever is live and listening to ${PORT}`);
 });
 
+const cors = require('cors');
+app.use(cors());
 
 
 
